@@ -1,7 +1,7 @@
 const uuid = require('uuid/v4');
 const HttpError = require('../models/http-error');
 
-const DUMMY_PLACES = [
+let DUMMY_PLACES = [
     {
         id: 'p1',
         title: 'MBS',
@@ -18,7 +18,6 @@ const DUMMY_PLACES = [
 const getPlaceById = (req, res, next) => {
 
     const placeId = req.params.pid;
-    console.log(`pid: ${placeId}`);
     const place = DUMMY_PLACES.find(p => {
         return p.id === placeId;
     });
@@ -32,7 +31,6 @@ const getPlaceById = (req, res, next) => {
 
 const getPlaceByUserId = (req, res, next) => {
     const userId = req.params.uid;
-    console.log(`pid: ${userId}`);
     const place = DUMMY_PLACES.find(p => {
         return p.creator === userId;
     });
@@ -57,6 +55,32 @@ const createPlace = (req, res, next) => {
 
 }
 
+const updatePlace = (req, res, next) => {
+    const placeId = req.params.pid;
+    const { title, description } = req.body;
+
+    const updatedPlace = { ...DUMMY_PLACES.find(p => p.id === placeId) };
+    const placeIndex = DUMMY_PLACES.findIndex(p => p.id === placeId);
+    updatedPlace.title = title;
+    updatedPlace.description = description;
+    DUMMY_PLACES[placeIndex] = updatedPlace;
+
+    res.status(200).json({ place: updatedPlace });
+
+}
+
+const deletePlace = (req, res, next) => {
+    const placeId = req.params.pid;
+    DUMMY_PLACES = DUMMY_PLACES.filter(p => {
+        p.id !== placeId
+    })
+    res.status(200).json({ message: `place with ${placeId} deleted` });
+}
+
+
+
 exports.getPlaceById = getPlaceById;
 exports.getPlaceByUserId = getPlaceByUserId;
 exports.createPlace = createPlace;
+exports.updatePlace = updatePlace;
+exports.deletePlace = deletePlace;

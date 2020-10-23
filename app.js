@@ -11,10 +11,10 @@ app.use(bodyParser.json());
 //register middleware
 app.use('/api/places', placesRoutes);
 
-
+//throw error to error handler if no route is found
 app.use((req, res, next) => {
     const error = new HttpError('could not find this route', 404);
-    throw error;
+    return next(error);
 })
 
 //special error handling middleware
