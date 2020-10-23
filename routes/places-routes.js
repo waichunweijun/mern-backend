@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { getPlaceById, getPlaceByUserId, createPlace, updatePlace, deletePlace } = require('../controllers/places-controller')
+const { getPlaceById, getPlacesByUserId, createPlace, updatePlace, deletePlace } = require('../controllers/places-controller')
 
 
 //get place by id
 router.get('/:pid', getPlaceById);
 
 //get place by user id
-router.get('/user/:uid', getPlaceByUserId);
+router.get('/user/:uid', getPlacesByUserId);
 
 router.post('/', createPlace);
 
