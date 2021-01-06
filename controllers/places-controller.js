@@ -3,6 +3,8 @@ const { validationResult } = require('express-validator');
 const HttpError = require('../models/http-error');
 const getCoordsForAddress = require('../util/location');
 
+const Place = require('../models/place');
+
 let DUMMY_PLACES = [
     {
         id: 'p1',
@@ -75,11 +77,22 @@ const createPlace = async (req, res, next) => {
         return next(error);
     }
 
+    const createdPlace = new Place({
+        title, description, address, location: coordinates, image: 'https://picsum.photos/200/300', creator
+    })
 
-    const createdPlace = {
-        id: uuid(), title, description, location: coordinates, address, creator
+    //mongoose save method
+    try {
+        await createdPlace.save();
     }
-    DUMMY_PLACES.push(createPlace);
+    catch (err) {
+        const error = new HttpError(
+            'creating place failed, please try again',
+            500
+        );
+        return next(error);
+    }
+
     //send back response
     res.status(201).json({ place: createdPlace });
 
