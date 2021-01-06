@@ -6,9 +6,11 @@ const placesRoutes = require('./routes/places-routes');
 const usersRoutes = require('./routes/users-routes');
 const HttpError = require('./models/http-error');
 
-const password = 'GsBSPW9NaedHM47M';
-const dbname = 'places';
-const username = 'waichun'
+//this file has been git ignored for security purpose
+const mongoCredential = require('./credentials/mongoCredential');
+const password = mongoCredential.password;
+const dbname = mongoCredential.dbname;
+const username = mongoCredential.username;
 
 const mongoConnectionString = `mongodb+srv://${username}:${password}@cluster0.qijpt.mongodb.net/${dbname}?retryWrites=true&w=majority`;
 
@@ -39,8 +41,7 @@ app.use((error, req, res, next) => {
 
 //integrated mongoose function
 
-mongoose
-    .connect(mongoConnectionString, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoConnectionString, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         app.listen(5000)
     })
